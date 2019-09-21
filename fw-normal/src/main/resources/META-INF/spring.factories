@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.seeyu.normal.NormalConfigureStarter
+
+
+org.springframework.context.ApplicationListener=com.seeyu.normal.listener.ValidateAppEnviromentStartupListener,\
+  com.seeyu.normal.listener.ApplicationAroundStartupListener

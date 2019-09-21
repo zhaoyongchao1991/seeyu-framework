@@ -1,0 +1,78 @@
+#!/bin/sh
+# chkconfig: 2345 10 90
+# Description: Start and Stop iot-portal server
+#
+cd /home/ubuntu/iot/app/iot-portal
+PROG=iot-portal.jar
+SERVER_NAME=iot-portal
+JAVA_HOME=/home/ubuntu/iot/app/jdk1.8.0_171
+
+PIDFILE=/var/run/$SERVER_NAME.pid
+status() {  
+	if [ -f $PIDFILE ]; then  
+		PID=$(cat $PIDFILE)  
+		if [ ! -x /proc/${PID} ]; then  
+			return 1  
+		else  
+			return 0  
+		fi  
+	else  
+		return 1  
+	fi  
+}  
+  
+case "$1" in  
+	start)  
+		status  
+		RETVAL=$?  
+		if [ $RETVAL -eq 0 ]; then  
+			echo "$PIDFILE exists, process is already running or crashed"  
+			exit 1  
+		fi  
+		  
+		echo "Starting $SERVER_NAME ..."  
+		nohup $JAVA_HOME/bin/java -server -Dfile.encoding=utf-8 -Xincgc -jar $PROG 2>> /dev/null >> /dev/null &
+		RETVAL=$?  
+		if [ $RETVAL -eq 0 ]; then  
+			echo "$SERVER_NAME is started"  
+			echo $! > $PIDFILE  
+			exit 0  
+		else  
+			echo "Stopping $SERVER_NAME"  
+			rm -f $PIDFILE  
+			exit 1  
+		fi  
+		;;  
+	stop)  
+		status  
+		RETVAL=$?  
+		if [ $RETVAL -eq 0 ]; then  
+			echo "Shutting down $SERVER_NAME"  
+			kill `cat $PIDFILE`  
+			RETVAL=$?  
+			if [ $RETVAL -eq 0 ]; then  
+				rm -f $PIDFILE  
+			else  
+				echo "Failed to stopping $SERVER_NAME"  
+			fi  
+		fi  
+		;;  
+	status)  
+		status  
+		RETVAL=$?  
+		if [ $RETVAL -eq 0 ]; then  
+			PID=$(cat $PIDFILE)  
+			echo "$SERVER_NAME is running ($PID)"  
+		else  
+			echo "$SERVER_NAME is not running"  
+		fi  
+		;;  
+	restart)  
+		$0 stop  
+		sleep 5
+		$0 start  
+		;;  
+	*)  
+		echo "Usage: $0 {start|stop|restart|status}"  
+		;;  
+esac  
