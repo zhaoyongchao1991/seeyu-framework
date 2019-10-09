@@ -12,6 +12,27 @@ public class DateUtils {
 
 
     /**
+     * 使用默认的pattern(yyyy-MM-dd)对日期进行转换
+     * @param date
+     * @return
+     */
+    public static Date trunc(Date date){
+        return trunc(date, "yyyy-MM-dd");
+    }
+
+    /**
+     * 使用pattern对日期进行转换
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static Date trunc(Date date, String pattern){
+        String s = datePrint(date, pattern);
+        return dateFormat(s, pattern);
+    }
+
+
+    /**
      * 日期加减
      * @param date
      * @param field 如: Calendar.MONTH
