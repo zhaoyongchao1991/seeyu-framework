@@ -1,4 +1,4 @@
-package com.seeyu.normal.dao;
+package com.seeyu.normal.dao.mapper;
 
 import org.apache.ibatis.annotations.*;
 
@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.*;
  * @author seeyu
  * @date 2019/6/3
  */
-@Mapper
-public interface MysqlExecuteMapper {
+public interface SqlExecuteMapper {
 
 
     @ResultType(Integer.class)

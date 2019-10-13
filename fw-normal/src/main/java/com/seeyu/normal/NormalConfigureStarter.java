@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author seeyu
  * @date 2019/3/8
  */
-@MapperScan(basePackages = "com.seeyu.normal.dao")
+@MapperScan(basePackages = "com.seeyu.normal.dao.mapper")
 @ImportAutoConfiguration({AutoConfigure.class})
 @Configuration
 public class NormalConfigureStarter {

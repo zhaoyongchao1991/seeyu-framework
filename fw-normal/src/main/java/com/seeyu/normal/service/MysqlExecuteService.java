@@ -1,7 +1,6 @@
 package com.seeyu.normal.service;
 
-import com.seeyu.normal.dao.MysqlExecuteMapper;
-import org.apache.ibatis.annotations.Update;
+import com.seeyu.normal.dao.mapper.SqlExecuteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MysqlExecuteService {
 
     @Autowired
-    private MysqlExecuteMapper mysqlExecuteMapper;
+    private SqlExecuteMapper mysqlExecuteMapper;
 
 
     public boolean tableExists(String tableName) {

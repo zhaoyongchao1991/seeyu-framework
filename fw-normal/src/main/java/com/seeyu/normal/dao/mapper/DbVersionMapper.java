@@ -1,4 +1,4 @@
-package com.seeyu.normal.dao;
+package com.seeyu.normal.dao.mapper;
 
 import com.seeyu.normal.entity.DbVersion;
 import com.seeyu.normal.service.DataUpgradeService;

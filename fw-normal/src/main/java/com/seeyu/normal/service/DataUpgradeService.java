@@ -3,7 +3,7 @@ package com.seeyu.normal.service;
 import com.seeyu.core.utils.Assert;
 import com.seeyu.lang.utils.FileUtils;
 import com.seeyu.lang.utils.StringUtils;
-import com.seeyu.normal.dao.DbVersionMapper;
+import com.seeyu.normal.dao.mapper.DbVersionMapper;
 import com.seeyu.normal.entity.DbVersion;
 import com.seeyu.normal.initialization.DatabaseUpgradeInitialization;
 import com.seeyu.normal.service.helper.SqlTextParseHelper;
