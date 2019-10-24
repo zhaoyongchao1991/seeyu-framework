@@ -28,6 +28,11 @@ public class AuditLogFilter implements Filter {
     private AuditLogServiceI auditLogService;
 
     @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try{
 
@@ -40,6 +45,11 @@ public class AuditLogFilter implements Filter {
         finally {
             AuditLogger.clear();
         }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 
     private void processAuditLog() {

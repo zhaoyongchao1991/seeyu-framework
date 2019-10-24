@@ -36,6 +36,10 @@ public class RequestContextOgnlControllerAdvice extends RequestBodyAdviceAdapter
         return body;
     }
 
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -47,6 +51,10 @@ public class RequestContextOgnlControllerAdvice extends RequestBodyAdviceAdapter
         RequestContextOgnlContextHolder.clear();
     }
 
+    @Override
+    public void destroy() {
+
+    }
 
     private void putOgnlContextRequestBodyParameter(Object parameter){
         RequestContextOgnlContextHolder.putOgnlContextValue(RequestContextOgnlParser.DEFAULT_REQUEST_BODY_PARAMETER_KEY, parameter);
