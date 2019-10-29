@@ -1,6 +1,7 @@
 package com.seeyu.lang.utils;
 
 import java.io.*;
+import java.nio.file.Path;
 
 /**
  * @author seeyu
@@ -163,8 +164,13 @@ public class FileUtils {
      * @return
      */
     public static String extractExtensionName(String path, boolean upperCase){
-        String extension = path.substring(path.lastIndexOf(".") + 1);
-        return upperCase ? extension.toUpperCase() : extension;
+        if(!path.contains(".")){
+            return null;
+        }
+        else{
+            String extension = path.substring(path.lastIndexOf(".") + 1);
+            return upperCase ? extension.toUpperCase() : extension;
+        }
     }
 
     /**
@@ -203,7 +209,13 @@ public class FileUtils {
      * @return
      */
     public static String replaceFileName(String source, String target){
-        return target + "." + extractExtensionName(source, false);
+        String extension = extractExtensionName(source, false);
+        if(StringUtils.isNotBlank(extension)){
+            return target + "." + extension;
+        }
+        else{
+            return target;
+        }
     }
 
     /**

@@ -10,5 +10,5 @@ public interface SecurityUserHolderI {
 
     List<SecurityResourceHolderI> getResources();
 
-
+    boolean isAdmin();
 }

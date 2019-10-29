@@ -3,6 +3,7 @@ package com.seeyu.mvc.security.filter;
 import com.seeyu.core.exception.LoginAuthenticationFailException;
 import com.seeyu.core.utils.BaseJsonData;
 import com.seeyu.mvc.common.constant.ResponseCode;
+import com.seeyu.mvc.common.model.LoginUserInfoI;
 import com.seeyu.mvc.common.model.SecurityResourceHolderI;
 import com.seeyu.mvc.common.model.SecurityUserHolderI;
 import com.seeyu.mvc.common.service.SecurityPolicyServiceI;
@@ -112,9 +113,13 @@ public class SecurityFilter implements Filter {
      */
     private boolean checkLoginUserResource(HttpServletRequest req, String uri) {
         try {
-            SecurityUserHolderI me = (SecurityUserHolderI)LoginUserInfoContext.getLoginUser();
+            LoginUserInfoI loginUserInfo = LoginUserInfoContext.getLoginUser();
+            SecurityUserHolderI me = loginUserInfo == null ? null : (SecurityUserHolderI)loginUserInfo.getInfo();
             if(me == null){
                 return false;
+            }
+            if(me.isAdmin()){
+                return true;
             }
             List<SecurityResourceHolderI> userResource = me.getResources();
             if(userResource != null){
