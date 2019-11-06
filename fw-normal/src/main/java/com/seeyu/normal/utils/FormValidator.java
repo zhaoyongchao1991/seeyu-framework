@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
  */
 public class FormValidator {
 
-
-
 	/**
 	 * 检查是否不存在
 	 * @param input
@@ -277,9 +275,10 @@ public class FormValidator {
 		if(!Pattern.compile(reg).matcher(val).matches()){
 			Alert.alert( "{}只能是数字,字母组成,以及标点符号组成", input);
 		}
+		checkPasswordComplexity(input, val);
 		return;
 	}
-	
+
 	/**
 	 * 验证数字和字母组成
 	 * @param input
@@ -368,7 +367,40 @@ public class FormValidator {
 			}
 		}
 	}
-	
+
+	/**
+	 * 检查密码复杂度
+	 */
+	private static void checkPasswordComplexity(String input, String password) {
+		//数字
+		String REG_NUMBER = ".*\\d+.*";
+		//小写字母
+		String REG_UPPERCASE = ".*[A-Z]+.*";
+		//大写字母
+		String REG_LOWERCASE = ".*[a-z]+.*";
+		//特殊符号
+		String REG_SYMBOL = ".*[~!@#$%^&*()_+|<>,.?/:;'\\[\\]{}\"]+.*";
+		if (password.length() < 8) {
+			Alert.alert("{}长度不能小于8位", input);
+		}
+		int i = 0;
+		if (password.matches(REG_NUMBER)) {
+			i++;
+		}
+		if (password.matches(REG_LOWERCASE)) {
+			i++;
+		}
+		if (password.matches(REG_UPPERCASE)) {
+			i++;
+		}
+		if (password.matches(REG_SYMBOL)) {
+			i++;
+		}
+		if (i < 3) {
+			Alert.alert("{}必须由大小写字母、数字、特殊字符中的至少三种组成", input);
+		}
+	}
+
 
 	/**
 	 * 验证类型
