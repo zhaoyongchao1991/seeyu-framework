@@ -1,18 +1,16 @@
 package com.seeyu.normal.configuration;
 
+import com.seeyu.normal.initialization.SecurityResourceLoadInitialization;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @author seeyu
- * @date 2019/6/12
+ * @date 2019/11/19
  */
-
 @ImportAutoConfiguration({
-        GlobalAutoConfigure.class,
-        DatabaseUpgradeAutoConfigure.class,
-        SecurityAutoConfiguration.class,
+        SecurityResourceLoadInitialization.class
 })
 @Configuration
-public class AutoConfigure {
+public class SecurityAutoConfiguration {
 }
