@@ -3,6 +3,7 @@ package com.seeyu.normal.initialization;
 import com.seeyu.mvc.security.filter.SecurityFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct;
  * @date 2019/11/19
  */
 @Slf4j
+@ConditionalOnBean(SecurityFilter.class)
 @Configuration
 public class SecurityResourceLoadInitialization {
 
