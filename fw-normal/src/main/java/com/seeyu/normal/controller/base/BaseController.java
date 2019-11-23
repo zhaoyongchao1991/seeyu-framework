@@ -7,10 +7,12 @@ import com.seeyu.mvc.constant.I18nMessageKeyConstant;
 import com.seeyu.mvc.controller.base.AbstractController;
 import com.seeyu.normal.constant.MvcConstant;
 import com.seeyu.normal.utils.JsonData;
+import org.springframework.stereotype.Controller;
 
 /**
  * @author seeyu
  */
+@Controller
 public abstract class BaseController extends AbstractController {
 
     public static String passwordEncrypt(String password) throws Exception {
