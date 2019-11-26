@@ -1,5 +1,6 @@
 package com.seeyu.core.utils;
 
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString
@@ -8,13 +9,16 @@ public class BaseJsonData<T> extends ServiceData<T> {
     protected Exception exception;
     protected String exceptionMessage;
     protected Integer code;
+    @Getter
+    protected Long timestamp;
 
     public BaseJsonData() {
-        super();
+        this(false);
     }
 
     protected BaseJsonData(boolean success) {
         super(success);
+        this.timestamp = System.currentTimeMillis();
     }
 
     public static BaseJsonData SUCCESS() {

@@ -1,7 +1,9 @@
 package com.seeyu.core.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.seeyu.core.exception.AlertException;
 import com.seeyu.core.exception.AlertRuntimeException;
+import com.seeyu.core.exception.ServiceException;
 
 /**
  * @author seeyu
@@ -66,12 +68,10 @@ public class ServiceData<T> {
     /**
      * 结束方法 向上抛出异常
      */
-    public void raise(){
-        if(!success){
-            throw new AlertRuntimeException(message == null ? "" : message);
+    public ServiceData<T> raise() throws ServiceException {
+        if(!this.success){
+            throw new AlertException(this.message, this.messageArgs);
         }
-        else{
-            //保留
-        }
+        return this;
     }
 }
