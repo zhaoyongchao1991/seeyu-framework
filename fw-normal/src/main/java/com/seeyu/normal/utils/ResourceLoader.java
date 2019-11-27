@@ -1,7 +1,6 @@
-package com.seeyu.normal.config;
+package com.seeyu.normal.utils;
 
 import com.seeyu.normal.MySpringApplication;
-import com.seeyu.normal.utils.ResourceLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ResourceUtils;
 
@@ -12,13 +11,11 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * @see ResourceLoader
  * @author seeyu
  * @date 2019/6/11
  */
-@Deprecated
 @Slf4j
-public class GlobalConfig {
+public class ResourceLoader {
 
 
     public static final String CLASSPATH_PREFIX = "classpath:";
