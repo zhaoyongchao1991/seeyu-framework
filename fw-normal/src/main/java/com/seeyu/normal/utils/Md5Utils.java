@@ -5,6 +5,7 @@ import org.springframework.util.DigestUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author seeyu
@@ -23,7 +24,11 @@ public class Md5Utils {
         }
     }
 
-    public static String encrypt(String data) throws Exception {
-        return DigestUtils.md5DigestAsHex(data.getBytes("UTF-8"));
+    public static String encrypt(String data) {
+        return DigestUtils.md5DigestAsHex(data.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String encrypt(String data, String salt) {
+        return DigestUtils.md5DigestAsHex((data + salt).getBytes(StandardCharsets.UTF_8));
     }
 }
