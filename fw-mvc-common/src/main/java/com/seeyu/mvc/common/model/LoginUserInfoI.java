@@ -12,6 +12,8 @@ public interface LoginUserInfoI<T> {
 
     String getName();
 
+    String getAccount();
+
     T getInfo();
 
 }

@@ -13,12 +13,14 @@ public class BaseLoginUserInfo<T> implements LoginUserInfoI{
 
     private Serializable id;
     private String name;
+    private String account;
     private T info;
 
-    public BaseLoginUserInfo(Serializable id, String name, T info){
+    public BaseLoginUserInfo(Serializable id,String account, String name, T info){
         this.id = id;
         this.name = name;
         this.info = info;
+        this.account = account;
     }
 
 
