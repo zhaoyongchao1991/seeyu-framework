@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.AuthRoleMapper">
+  <resultMap extends="com.seeyu.fw.auth.mapper.base.BaseAuthRoleMapper.BaseResultMap" id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthRole" />
+
+
+  <select id="getRoleNameCount" resultType="int">
+    select count(1) from auth_role where role_name=#{roleName,jdbcType=VARCHAR}
+    <if test="roleId != null">
+      and role_id!=#{roleId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+</mapper>

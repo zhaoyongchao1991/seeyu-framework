@@ -1,0 +1,16 @@
+package com.seeyu.fw.auth.constant;
+
+/**
+ * @author seeyu
+ * @date 2019/4/26
+ */
+public class GlobalConstant {
+
+
+    /**
+     * 账户默认密码
+     */
+    public static final String ACCOUNT_DEFAULT_PASSWORD = "123456";
+
+
+}

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.base.BaseAuthServiceMapper">
+  <resultMap id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthService">
+    <id column="service_id" jdbcType="INTEGER" property="serviceId" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="service_text" jdbcType="VARCHAR" property="serviceText" />
+    <result column="service_system" jdbcType="BIT" property="serviceSystem" />
+    <result column="service_info" jdbcType="VARCHAR" property="serviceInfo" />
+    <result column="service_active" jdbcType="BIT" property="serviceActive" />
+    <result column="service_add_time" jdbcType="TIMESTAMP" property="serviceAddTime" />
+    <result column="service_add_user" jdbcType="VARCHAR" property="serviceAddUser" />
+    <result column="service_modify_time" jdbcType="TIMESTAMP" property="serviceModifyTime" />
+    <result column="service_modify_user" jdbcType="VARCHAR" property="serviceModifyUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    service_id, service_name, service_text, service_system, service_info, service_active, 
+    service_add_time, service_add_user, service_modify_time, service_modify_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_service
+    where service_id = #{serviceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_service
+    where service_id = #{serviceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seeyu.fw.auth.entity.AuthService">
+    <selectKey keyProperty="serviceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_service (service_name, service_text, service_system, 
+      service_info, service_active, service_add_time, 
+      service_add_user, service_modify_time, service_modify_user
+      )
+    values (#{serviceName,jdbcType=VARCHAR}, #{serviceText,jdbcType=VARCHAR}, #{serviceSystem,jdbcType=BIT}, 
+      #{serviceInfo,jdbcType=VARCHAR}, #{serviceActive,jdbcType=BIT}, #{serviceAddTime,jdbcType=TIMESTAMP}, 
+      #{serviceAddUser,jdbcType=VARCHAR}, #{serviceModifyTime,jdbcType=TIMESTAMP}, #{serviceModifyUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.seeyu.fw.auth.entity.AuthService">
+    <selectKey keyProperty="serviceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_service
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="serviceText != null">
+        service_text,
+      </if>
+      <if test="serviceSystem != null">
+        service_system,
+      </if>
+      <if test="serviceInfo != null">
+        service_info,
+      </if>
+      <if test="serviceActive != null">
+        service_active,
+      </if>
+      <if test="serviceAddTime != null">
+        service_add_time,
+      </if>
+      <if test="serviceAddUser != null">
+        service_add_user,
+      </if>
+      <if test="serviceModifyTime != null">
+        service_modify_time,
+      </if>
+      <if test="serviceModifyUser != null">
+        service_modify_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceText != null">
+        #{serviceText,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceSystem != null">
+        #{serviceSystem,jdbcType=BIT},
+      </if>
+      <if test="serviceInfo != null">
+        #{serviceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActive != null">
+        #{serviceActive,jdbcType=BIT},
+      </if>
+      <if test="serviceAddTime != null">
+        #{serviceAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceAddUser != null">
+        #{serviceAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceModifyTime != null">
+        #{serviceModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceModifyUser != null">
+        #{serviceModifyUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seeyu.fw.auth.entity.AuthService">
+    update auth_service
+    <set>
+      <if test="serviceName != null">
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceText != null">
+        service_text = #{serviceText,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceSystem != null">
+        service_system = #{serviceSystem,jdbcType=BIT},
+      </if>
+      <if test="serviceInfo != null">
+        service_info = #{serviceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActive != null">
+        service_active = #{serviceActive,jdbcType=BIT},
+      </if>
+      <if test="serviceAddTime != null">
+        service_add_time = #{serviceAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceAddUser != null">
+        service_add_user = #{serviceAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceModifyTime != null">
+        service_modify_time = #{serviceModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceModifyUser != null">
+        service_modify_user = #{serviceModifyUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where service_id = #{serviceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seeyu.fw.auth.entity.AuthService">
+    update auth_service
+    set service_name = #{serviceName,jdbcType=VARCHAR},
+      service_text = #{serviceText,jdbcType=VARCHAR},
+      service_system = #{serviceSystem,jdbcType=BIT},
+      service_info = #{serviceInfo,jdbcType=VARCHAR},
+      service_active = #{serviceActive,jdbcType=BIT},
+      service_add_time = #{serviceAddTime,jdbcType=TIMESTAMP},
+      service_add_user = #{serviceAddUser,jdbcType=VARCHAR},
+      service_modify_time = #{serviceModifyTime,jdbcType=TIMESTAMP},
+      service_modify_user = #{serviceModifyUser,jdbcType=VARCHAR}
+    where service_id = #{serviceId,jdbcType=INTEGER}
+  </update>
+</mapper>

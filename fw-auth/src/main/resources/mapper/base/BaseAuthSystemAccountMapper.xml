@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.base.BaseAuthSystemAccountMapper">
+  <resultMap id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthSystemAccount">
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="account_account" jdbcType="VARCHAR" property="accountAccount" />
+    <result column="account_password" jdbcType="VARCHAR" property="accountPassword" />
+    <result column="account_active" jdbcType="INTEGER" property="accountActive" />
+    <result column="account_modify_pw_last_time" jdbcType="TIMESTAMP" property="accountModifyPwLastTime" />
+    <result column="account_add_time" jdbcType="TIMESTAMP" property="accountAddTime" />
+    <result column="account_add_user" jdbcType="VARCHAR" property="accountAddUser" />
+    <result column="account_modify_time" jdbcType="TIMESTAMP" property="accountModifyTime" />
+    <result column="account_modify_user" jdbcType="VARCHAR" property="accountModifyUser" />
+  </resultMap>
+  <insert id="insert" parameterType="com.seeyu.fw.auth.entity.AuthSystemAccount">
+    <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_system_account (account_account, account_password, 
+      account_active, account_modify_pw_last_time, 
+      account_add_time, account_add_user, account_modify_time, 
+      account_modify_user)
+    values (#{accountAccount,jdbcType=VARCHAR}, #{accountPassword,jdbcType=VARCHAR}, 
+      #{accountActive,jdbcType=INTEGER}, #{accountModifyPwLastTime,jdbcType=TIMESTAMP}, 
+      #{accountAddTime,jdbcType=TIMESTAMP}, #{accountAddUser,jdbcType=VARCHAR}, #{accountModifyTime,jdbcType=TIMESTAMP}, 
+      #{accountModifyUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.seeyu.fw.auth.entity.AuthSystemAccount">
+    <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_system_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountAccount != null">
+        account_account,
+      </if>
+      <if test="accountPassword != null">
+        account_password,
+      </if>
+      <if test="accountActive != null">
+        account_active,
+      </if>
+      <if test="accountModifyPwLastTime != null">
+        account_modify_pw_last_time,
+      </if>
+      <if test="accountAddTime != null">
+        account_add_time,
+      </if>
+      <if test="accountAddUser != null">
+        account_add_user,
+      </if>
+      <if test="accountModifyTime != null">
+        account_modify_time,
+      </if>
+      <if test="accountModifyUser != null">
+        account_modify_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountAccount != null">
+        #{accountAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="accountPassword != null">
+        #{accountPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="accountActive != null">
+        #{accountActive,jdbcType=INTEGER},
+      </if>
+      <if test="accountModifyPwLastTime != null">
+        #{accountModifyPwLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountAddTime != null">
+        #{accountAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountAddUser != null">
+        #{accountAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="accountModifyTime != null">
+        #{accountModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountModifyUser != null">
+        #{accountModifyUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

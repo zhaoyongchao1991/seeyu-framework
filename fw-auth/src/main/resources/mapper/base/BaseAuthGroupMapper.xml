@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.base.BaseAuthGroupMapper">
+  <resultMap id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthGroup">
+    <id column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_code" jdbcType="VARCHAR" property="groupCode" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+    <result column="group_add_time" jdbcType="TIMESTAMP" property="groupAddTime" />
+    <result column="group_add_user" jdbcType="VARCHAR" property="groupAddUser" />
+    <result column="group_modify_time" jdbcType="TIMESTAMP" property="groupModifyTime" />
+    <result column="group_modify_user" jdbcType="VARCHAR" property="groupModifyUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    group_id, group_name, group_code, group_remark, group_add_time, group_add_user, group_modify_time, 
+    group_modify_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_group
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_group
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seeyu.fw.auth.entity.AuthGroup">
+    <selectKey keyProperty="groupId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_group (group_name, group_code, group_remark, 
+      group_add_time, group_add_user, group_modify_time, 
+      group_modify_user)
+    values (#{groupName,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, 
+      #{groupAddTime,jdbcType=TIMESTAMP}, #{groupAddUser,jdbcType=VARCHAR}, #{groupModifyTime,jdbcType=TIMESTAMP}, 
+      #{groupModifyUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.seeyu.fw.auth.entity.AuthGroup">
+    <selectKey keyProperty="groupId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="groupCode != null">
+        group_code,
+      </if>
+      <if test="groupRemark != null">
+        group_remark,
+      </if>
+      <if test="groupAddTime != null">
+        group_add_time,
+      </if>
+      <if test="groupAddUser != null">
+        group_add_user,
+      </if>
+      <if test="groupModifyTime != null">
+        group_modify_time,
+      </if>
+      <if test="groupModifyUser != null">
+        group_modify_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCode != null">
+        #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupRemark != null">
+        #{groupRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAddTime != null">
+        #{groupAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupAddUser != null">
+        #{groupAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="groupModifyTime != null">
+        #{groupModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupModifyUser != null">
+        #{groupModifyUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seeyu.fw.auth.entity.AuthGroup">
+    update auth_group
+    <set>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCode != null">
+        group_code = #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupRemark != null">
+        group_remark = #{groupRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAddTime != null">
+        group_add_time = #{groupAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupAddUser != null">
+        group_add_user = #{groupAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="groupModifyTime != null">
+        group_modify_time = #{groupModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupModifyUser != null">
+        group_modify_user = #{groupModifyUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seeyu.fw.auth.entity.AuthGroup">
+    update auth_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      group_code = #{groupCode,jdbcType=VARCHAR},
+      group_remark = #{groupRemark,jdbcType=VARCHAR},
+      group_add_time = #{groupAddTime,jdbcType=TIMESTAMP},
+      group_add_user = #{groupAddUser,jdbcType=VARCHAR},
+      group_modify_time = #{groupModifyTime,jdbcType=TIMESTAMP},
+      group_modify_user = #{groupModifyUser,jdbcType=VARCHAR}
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+</mapper>

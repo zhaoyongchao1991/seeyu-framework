@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.base.BaseAuthResourceMapper">
+  <resultMap id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthResource">
+    <id column="resource_id" jdbcType="INTEGER" property="resourceId" />
+    <result column="resource_service_id" jdbcType="INTEGER" property="resourceServiceId" />
+    <result column="resource_name" jdbcType="VARCHAR" property="resourceName" />
+    <result column="resource_text" jdbcType="VARCHAR" property="resourceText" />
+    <result column="resource_remark" jdbcType="VARCHAR" property="resourceRemark" />
+    <result column="resource_uri" jdbcType="VARCHAR" property="resourceUri" />
+    <result column="resource_level" jdbcType="INTEGER" property="resourceLevel" />
+    <result column="resource_active" jdbcType="INTEGER" property="resourceActive" />
+    <result column="resource_add_time" jdbcType="TIMESTAMP" property="resourceAddTime" />
+    <result column="resource_add_user" jdbcType="VARCHAR" property="resourceAddUser" />
+    <result column="resource_modify_time" jdbcType="TIMESTAMP" property="resourceModifyTime" />
+    <result column="resource_modify_user" jdbcType="VARCHAR" property="resourceModifyUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resource_id, resource_service_id, resource_name, resource_text, resource_remark, 
+    resource_uri, resource_level, resource_active, resource_add_time, resource_add_user, 
+    resource_modify_time, resource_modify_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seeyu.fw.auth.entity.AuthResource">
+    <selectKey keyProperty="resourceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_resource (resource_service_id, resource_name, 
+      resource_text, resource_remark, resource_uri, 
+      resource_level, resource_active, resource_add_time, 
+      resource_add_user, resource_modify_time, 
+      resource_modify_user)
+    values (#{resourceServiceId,jdbcType=INTEGER}, #{resourceName,jdbcType=VARCHAR}, 
+      #{resourceText,jdbcType=VARCHAR}, #{resourceRemark,jdbcType=VARCHAR}, #{resourceUri,jdbcType=VARCHAR}, 
+      #{resourceLevel,jdbcType=INTEGER}, #{resourceActive,jdbcType=INTEGER}, #{resourceAddTime,jdbcType=TIMESTAMP}, 
+      #{resourceAddUser,jdbcType=VARCHAR}, #{resourceModifyTime,jdbcType=TIMESTAMP}, 
+      #{resourceModifyUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.seeyu.fw.auth.entity.AuthResource">
+    <selectKey keyProperty="resourceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resourceServiceId != null">
+        resource_service_id,
+      </if>
+      <if test="resourceName != null">
+        resource_name,
+      </if>
+      <if test="resourceText != null">
+        resource_text,
+      </if>
+      <if test="resourceRemark != null">
+        resource_remark,
+      </if>
+      <if test="resourceUri != null">
+        resource_uri,
+      </if>
+      <if test="resourceLevel != null">
+        resource_level,
+      </if>
+      <if test="resourceActive != null">
+        resource_active,
+      </if>
+      <if test="resourceAddTime != null">
+        resource_add_time,
+      </if>
+      <if test="resourceAddUser != null">
+        resource_add_user,
+      </if>
+      <if test="resourceModifyTime != null">
+        resource_modify_time,
+      </if>
+      <if test="resourceModifyUser != null">
+        resource_modify_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resourceServiceId != null">
+        #{resourceServiceId,jdbcType=INTEGER},
+      </if>
+      <if test="resourceName != null">
+        #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceText != null">
+        #{resourceText,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceRemark != null">
+        #{resourceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUri != null">
+        #{resourceUri,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceLevel != null">
+        #{resourceLevel,jdbcType=INTEGER},
+      </if>
+      <if test="resourceActive != null">
+        #{resourceActive,jdbcType=INTEGER},
+      </if>
+      <if test="resourceAddTime != null">
+        #{resourceAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourceAddUser != null">
+        #{resourceAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceModifyTime != null">
+        #{resourceModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourceModifyUser != null">
+        #{resourceModifyUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seeyu.fw.auth.entity.AuthResource">
+    update auth_resource
+    <set>
+      <if test="resourceServiceId != null">
+        resource_service_id = #{resourceServiceId,jdbcType=INTEGER},
+      </if>
+      <if test="resourceName != null">
+        resource_name = #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceText != null">
+        resource_text = #{resourceText,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceRemark != null">
+        resource_remark = #{resourceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUri != null">
+        resource_uri = #{resourceUri,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceLevel != null">
+        resource_level = #{resourceLevel,jdbcType=INTEGER},
+      </if>
+      <if test="resourceActive != null">
+        resource_active = #{resourceActive,jdbcType=INTEGER},
+      </if>
+      <if test="resourceAddTime != null">
+        resource_add_time = #{resourceAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourceAddUser != null">
+        resource_add_user = #{resourceAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceModifyTime != null">
+        resource_modify_time = #{resourceModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourceModifyUser != null">
+        resource_modify_user = #{resourceModifyUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seeyu.fw.auth.entity.AuthResource">
+    update auth_resource
+    set resource_service_id = #{resourceServiceId,jdbcType=INTEGER},
+      resource_name = #{resourceName,jdbcType=VARCHAR},
+      resource_text = #{resourceText,jdbcType=VARCHAR},
+      resource_remark = #{resourceRemark,jdbcType=VARCHAR},
+      resource_uri = #{resourceUri,jdbcType=VARCHAR},
+      resource_level = #{resourceLevel,jdbcType=INTEGER},
+      resource_active = #{resourceActive,jdbcType=INTEGER},
+      resource_add_time = #{resourceAddTime,jdbcType=TIMESTAMP},
+      resource_add_user = #{resourceAddUser,jdbcType=VARCHAR},
+      resource_modify_time = #{resourceModifyTime,jdbcType=TIMESTAMP},
+      resource_modify_user = #{resourceModifyUser,jdbcType=VARCHAR}
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+</mapper>

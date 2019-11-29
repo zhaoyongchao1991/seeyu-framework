@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyu.fw.auth.mapper.AuthSystemAccountMapper">
+  <resultMap extends="com.seeyu.fw.auth.mapper.base.BaseAuthSystemAccountMapper.BaseResultMap" id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthSystemAccount" />
+
+  <select id="selectSystemAccountByAccount" resultMap="BaseResultMap">
+    select *
+    from auth_system_account
+    where account_account=#{account,jdbcType=VARCHAR}
+  </select>
+
+
+  <update id="updateSystemAccountPassword">
+        update auth_system_account
+        set account_password=#{accountPassword,jdbcType=VARCHAR},
+        account_modify_pw_last_time=#{accountModifyPwLastTime,jdbcType=TIMESTAMP}
+        where account_id =#{accountId,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>
