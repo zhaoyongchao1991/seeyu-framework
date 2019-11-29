@@ -13,25 +13,25 @@ import java.util.regex.Pattern;
 public class FormValidator {
 
 	/**
-	 * 检查是否不存在
+	 * 检查是否存在
 	 * @param input
 	 * @param b
 	 */
 	public static void notExist(String input, boolean b){
-		if(b){
-			Alert.alert("{}不存在", input);
+		if(!b){
+			Alert.alert("{}已经存在", input);
 		}
 	}
 
 
 	/**
-	 * 检查是否存在
+	 * 检查是否不存在
 	 * @param input
 	 * @param b
 	 */
-	public static void alreadyExist(String input, boolean b){
-		if(b){
-			Alert.alert( "{}已经存在", input);
+	public static void exist(String input, boolean b){
+		if(!b){
+			Alert.alert( "{}不存在", input);
 		}
 	}
 
