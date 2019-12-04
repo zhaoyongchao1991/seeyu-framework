@@ -3,18 +3,18 @@ package com.seeyu.fw.auth.service;
 import com.seeyu.core.constant.ActivationState;
 import com.seeyu.fw.auth.config.AuthConfig;
 import com.seeyu.fw.auth.entity.AuthAccount;
+import com.seeyu.fw.auth.exception.AccountAlreadyExistException;
 import com.seeyu.fw.auth.exception.AccountNotExistException;
 import com.seeyu.fw.auth.mapper.AuthAccountMapper;
-import com.seeyu.fw.auth.service.helper.AccountServiceHelper;
+import com.seeyu.fw.auth.service.helper.AuthAccountServiceHelper;
 import com.seeyu.fw.auth.vo.AuthAccountAddModel;
-import com.seeyu.fw.auth.vo.AuthModifyPassWordModel;
 import com.seeyu.normal.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -27,33 +27,49 @@ public class AuthAccountService {
     @Autowired
     private AuthAccountMapper accountMapper;
     @Autowired
-    private AccountServiceHelper accountServiceHelper;
+    private AuthAccountServiceHelper accountServiceHelper;
     @Autowired
     private AuthAccountRelRoleService accountRelRoleService;
     @Autowired
     private AuthSystemAccountService systemAccountService;
 
+
     @Transactional(rollbackFor = Exception.class)
-    public void refreshAccountRoles(Integer accountId, Integer[] roleIds, String actionUser){
-        this.accountRelRoleService.deleteAccountRelation(accountId);
-        this.addAccountRoleRelations(accountId, roleIds);
+    public void deleteAccounts(List<Integer> accountIds){
+        if(accountIds != null){
+            for(Integer id : accountIds){
+                this.deleteAccount(id);
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void editUserRoles(Integer accountId, Integer[] addRoleIds, Integer[] removeRoleIds, String actionUser){
-        this.addAccountRoleRelations(accountId, addRoleIds);
-        this.removeAccountRoleRelations(accountId, removeRoleIds);
+    public void deleteAccount(Integer accountId){
+        this.accountRelRoleService.deleteRelationByAccount(accountId);
+        this.accountMapper.deleteByPrimaryKey(accountId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void refreshAccountRelRoleRelations(Integer accountId, List<Integer> roleIds, String actionUser){
+        this.accountRelRoleService.refreshAccountRoleRelations(accountId, roleIds, actionUser);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void editAccountRelRoleRelations(Integer accountId, List<Integer> addRoleIds, List<Integer> removeRoleIds, String actionUser){
+        this.accountRelRoleService.addRelation(accountId, addRoleIds, actionUser);
+        this.accountRelRoleService.deleteRelations(accountId, removeRoleIds);
     }
 
 
     /**
-     * @param account 账号
+     * 重置普通用户密码
+     * @param accountId 账号id
      * @param newPassword 明文密码
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public void resetAccountPassword(String account, String newPassword, String actionUser) throws AccountNotExistException {
-        this.accountServiceHelper.updatePassword(account, Md5Utils.encrypt(Md5Utils.encrypt(newPassword), AuthConfig.PASSWORD_SALT), true);
+    public void resetAccountPassword(Integer accountId, String newPassword, String actionUser) throws AccountNotExistException {
+        this.accountServiceHelper.updateAccountPassword(accountId, this.encodePassword(newPassword), true);
     }
 
 
@@ -91,14 +107,17 @@ public class AuthAccountService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public AuthAccount addAccount(AuthAccountAddModel model, String actionUser) {
-        AuthAccount account = this.accountServiceHelper.wrapAddAccount(model);
-        this.accountServiceHelper.validateAccount(account);
-
+    public AuthAccount addAccount(AuthAccountAddModel model, String actionUser) throws AccountAlreadyExistException {
+        AuthAccount account = new AuthAccount();
+        account.setAccountAccount(model.getAccountAccount());
+        account.setAccountPassword(model.getAccountPassword());
+        account.setAccountActive(model.getAccountActive());
         account.setAccountAddUser(actionUser);
         account.setAccountModifyUser(actionUser);
         account.setAccountAddTime(new Date());
         account.setAccountModifyTime(account.getAccountAddTime());
+        this.accountServiceHelper.validateAccount(account);
+        account.setAccountPassword(this.encodePassword(account.getAccountPassword()));
         this.accountMapper.insert(account);
         return account;
     }
@@ -128,28 +147,10 @@ public class AuthAccountService {
 //    }
 
 
-    private void addAccountRoleRelations(Integer actId, Integer[] addRoleIds){
-//        if(addRoleIds != null){
-//            for (Integer roleId : addRoleIds){
-//                UserRole userRole = new UserRole();
-//                userRole.setUreUsrid(actId);
-//                userRole.setUreRoleid(roleId);
-//                userRoleService.addUserRole(userRole);
-//            }
-//        }
+
+
+    private String encodePassword(String password){
+        return Md5Utils.encrypt(Md5Utils.encrypt(password), AuthConfig.PASSWORD_SALT);
     }
-
-
-    private void removeAccountRoleRelations(Integer actId, Integer[] removeRoleIds){
-//        if(removeRoleIds != null){
-//            for (Integer roleId : removeRoleIds){
-//                UserRole userRole = new UserRole();
-//                userRole.setUreUsrid(actId);
-//                userRole.setUreRoleid(roleId);
-//                userRoleService.deleteUserRole(userRole);
-//            }
-//        }
-    }
-
 
 }

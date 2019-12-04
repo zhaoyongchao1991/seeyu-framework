@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @date 2019/4/29
  */
 @Service
-public class RoleServiceHelper {
+public class AuthRoleServiceHelper {
 
     @Autowired
     private AuthRoleMapper roleMapper;

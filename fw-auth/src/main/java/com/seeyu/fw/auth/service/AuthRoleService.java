@@ -1,10 +1,13 @@
 package com.seeyu.fw.auth.service;
 
 import com.seeyu.core.constant.ActivationState;
+import com.seeyu.fw.auth.constant.message.RoleMessageConstant;
 import com.seeyu.fw.auth.entity.AuthRole;
 import com.seeyu.fw.auth.mapper.AuthRoleMapper;
-import com.seeyu.fw.auth.service.helper.RoleServiceHelper;
+import com.seeyu.fw.auth.service.helper.AuthRoleServiceHelper;
 import com.seeyu.fw.auth.vo.AuthRoleAddModel;
+import com.seeyu.fw.auth.vo.AuthRoleEditModel;
+import com.seeyu.normal.utils.FormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +22,7 @@ import java.util.Date;
 public class AuthRoleService {
 
     @Autowired
-    private RoleServiceHelper roleServiceHelper;
+    private AuthRoleServiceHelper roleServiceHelper;
     @Autowired
     private AuthRoleMapper roleMapper;
 //    @Autowired
@@ -52,13 +55,13 @@ public class AuthRoleService {
 //    }
 
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public void delete(Integer roeId){
-//        FormValidator.required(RoleMessageConstant.TITLE_ROLE_ID, roeId);
-//        roleMapper.deleteByPrimaryKey(roeId);
-//        userRoleMapper.deleteRoleRelation(roeId);
-//        roleResourceMapper.deleteRoleRelation(roeId);
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Integer roeId){
+        FormValidator.required(RoleMessageConstant.TITLE_ROLE_ID, roeId);
+        roleMapper.deleteByPrimaryKey(roeId);
+        //userRoleMapper.deleteRoleRelation(roeId);
+        //roleResourceMapper.deleteRoleRelation(roeId);
+    }
 
 //    @Transactional(rollbackFor = Exception.class)
 //    public void refreshRoleResources(Integer roeId, Integer[] resourceIds){
@@ -117,13 +120,20 @@ public class AuthRoleService {
 //    }
 
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public void editRole(RoleTo editRole){
-//        Role role = roleServiceHelper.wrapEditRole(editRole);
-//        roleServiceHelper.validateRole(role);
-//        roleServiceHelper.fillRole(role);
-//        roleMapper.updateByPrimaryKey(role);
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public void editRole(AuthRoleEditModel editModel, String actionUser){
+        AuthRole role = new AuthRole();
+        role.setRoleId(editModel.getRoleId());
+        role.setRoleName(editModel.getRoleName());
+        role.setRoleText(editModel.getRoleText());
+        role.setRoleRemark(editModel.getRoleRemark());
+        role.setRoleModifyUser(actionUser);
+        role.setRoleModifyTime(new Date());
+
+        //roleServiceHelper.validateRole(role);
+        //roleServiceHelper.fillRole(role);
+        this.roleMapper.updateByPrimaryKey(role);
+    }
 
 
 //    @Transactional(rollbackFor = Exception.class)

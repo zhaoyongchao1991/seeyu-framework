@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seeyu.fw.auth.mapper.base.BaseAuthSystemAccountMapper">
   <resultMap id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthSystemAccount">
-    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <id column="account_id" jdbcType="INTEGER" property="accountId" />
     <result column="account_account" jdbcType="VARCHAR" property="accountAccount" />
     <result column="account_password" jdbcType="VARCHAR" property="accountPassword" />
     <result column="account_active" jdbcType="INTEGER" property="accountActive" />
@@ -12,6 +12,20 @@
     <result column="account_modify_time" jdbcType="TIMESTAMP" property="accountModifyTime" />
     <result column="account_modify_user" jdbcType="VARCHAR" property="accountModifyUser" />
   </resultMap>
+  <sql id="Base_Column_List">
+    account_id, account_account, account_password, account_active, account_modify_pw_last_time, 
+    account_add_time, account_add_user, account_modify_time, account_modify_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_system_account
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_system_account
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.seeyu.fw.auth.entity.AuthSystemAccount">
     <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
@@ -83,4 +97,46 @@
       </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seeyu.fw.auth.entity.AuthSystemAccount">
+    update auth_system_account
+    <set>
+      <if test="accountAccount != null">
+        account_account = #{accountAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="accountPassword != null">
+        account_password = #{accountPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="accountActive != null">
+        account_active = #{accountActive,jdbcType=INTEGER},
+      </if>
+      <if test="accountModifyPwLastTime != null">
+        account_modify_pw_last_time = #{accountModifyPwLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountAddTime != null">
+        account_add_time = #{accountAddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountAddUser != null">
+        account_add_user = #{accountAddUser,jdbcType=VARCHAR},
+      </if>
+      <if test="accountModifyTime != null">
+        account_modify_time = #{accountModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountModifyUser != null">
+        account_modify_user = #{accountModifyUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seeyu.fw.auth.entity.AuthSystemAccount">
+    update auth_system_account
+    set account_account = #{accountAccount,jdbcType=VARCHAR},
+      account_password = #{accountPassword,jdbcType=VARCHAR},
+      account_active = #{accountActive,jdbcType=INTEGER},
+      account_modify_pw_last_time = #{accountModifyPwLastTime,jdbcType=TIMESTAMP},
+      account_add_time = #{accountAddTime,jdbcType=TIMESTAMP},
+      account_add_user = #{accountAddUser,jdbcType=VARCHAR},
+      account_modify_time = #{accountModifyTime,jdbcType=TIMESTAMP},
+      account_modify_user = #{accountModifyUser,jdbcType=VARCHAR}
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </update>
 </mapper>

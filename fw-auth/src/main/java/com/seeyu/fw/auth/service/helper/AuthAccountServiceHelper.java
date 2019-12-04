@@ -1,11 +1,13 @@
 package com.seeyu.fw.auth.service.helper;
 
 import com.seeyu.core.utils.Alert;
+import com.seeyu.core.utils.Assert;
 import com.seeyu.fw.auth.constant.message.AccountMessageConstant;
 import com.seeyu.fw.auth.constant.message.SystemMessageConstant;
 import com.seeyu.fw.auth.constant.option.GlobalOptions;
 import com.seeyu.fw.auth.entity.AuthAccount;
 import com.seeyu.fw.auth.entity.AuthSystemAccount;
+import com.seeyu.fw.auth.exception.AccountAlreadyExistException;
 import com.seeyu.fw.auth.exception.AccountNotExistException;
 import com.seeyu.fw.auth.mapper.AuthAccountMapper;
 import com.seeyu.fw.auth.service.AuthSystemAccountService;
@@ -23,9 +25,9 @@ import java.util.Date;
  * @date 2019/4/26
  */
 @Service
-public class AccountServiceHelper {
+public class AuthAccountServiceHelper {
 
-    public static final int ACCOUNT_LENGTH_MAX = 20;
+    public static final int ACCOUNT_LENGTH_MAX = 50;
     public static final int ACCOUNT_LENGTH_MIN = 2;
 
     public static final int ACCOUNT_PASSWORD_LENGTH_MAX = 20;
@@ -48,8 +50,8 @@ public class AccountServiceHelper {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public void updatePassword(String account, String password, boolean reset) throws AccountNotExistException {
-        AuthAccount normalAccount = this.accountMapper.selectAccountByAccount(account);
+    public void updateAccountPassword(Integer accountId, String password, boolean reset) throws AccountNotExistException {
+        AuthAccount normalAccount = this.accountMapper.selectByPrimaryKey(accountId);
         if(normalAccount != null){
             if(reset){
                 this.resetAccountPassword(normalAccount.getAccountId(), password);
@@ -59,13 +61,13 @@ public class AccountServiceHelper {
             }
         }
         else{
-            AuthSystemAccount systemAccount = this.systemAccountService.getSystemAccountByAccount(account);
-            if(systemAccount != null){
-
-            }
-            else{
+//            AuthSystemAccount systemAccount = this.systemAccountService.getSystemAccountById(accountId);
+//            if(systemAccount != null){
+//
+//            }
+//            else{
                 throw new AccountNotExistException();
-            }
+//            }
         }
     }
 
@@ -133,7 +135,7 @@ public class AccountServiceHelper {
 
 
 
-    public void validateAccount(AuthAccount account){
+    public void validateAccount(AuthAccount account) throws AccountAlreadyExistException {
         //账户验证
         FormValidator.validate(AccountMessageConstant.TITLE_ACCOUNT_ACCOUNT, account.getAccountAccount(), FormValidator.ValidateType.required, ValidateType.noBlank);
         FormValidator.rangeLength(AccountMessageConstant.TITLE_ACCOUNT_ACCOUNT, account.getAccountAccount(), ACCOUNT_LENGTH_MIN, ACCOUNT_LENGTH_MAX);
@@ -146,7 +148,9 @@ public class AccountServiceHelper {
         //账户存在
         if(account.getAccountId() == null){
             boolean accountExist = this.normalOrSystemAccountExist(account.getAccountAccount());
-            Alert.alert(!accountExist, SystemMessageConstant.OBJECT_ALREADY_EXIST, AccountMessageConstant.TITLE_ACCOUNT_ACCOUNT);
+            if(accountExist){
+                throw new AccountAlreadyExistException();
+            }
         }
     }
 

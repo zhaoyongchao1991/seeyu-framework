@@ -1,9 +1,9 @@
 package com.seeyu.fw.auth.entity;
 
+import com.fasterxml.jackson.annotation.*;
+import java.util.Date;
 import lombok.Data;
 import lombok.ToString;
-
-import java.util.Date;
 
 /**
  * auth_group_r_account

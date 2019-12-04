@@ -17,6 +17,10 @@ public class AuthSystemAccountService {
     @Autowired
     private AuthSystemAccountMapper systemAccountMapper;
 
+    public AuthSystemAccount getSystemAccountById(Integer accountId){
+        return this.systemAccountMapper.selectByPrimaryKey(accountId);
+    }
+
     public AuthSystemAccount getSystemAccountByAccount(String account){
         return this.systemAccountMapper.selectSystemAccountByAccount(account);
     }
