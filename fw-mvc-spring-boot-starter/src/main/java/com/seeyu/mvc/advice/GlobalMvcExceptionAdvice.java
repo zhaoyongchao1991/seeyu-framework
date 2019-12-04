@@ -3,6 +3,7 @@ package com.seeyu.mvc.advice;
 import com.seeyu.core.exception.AlertRuntimeException;
 import com.seeyu.core.exception.AuthorityAuthenticationFailException;
 import com.seeyu.core.exception.LoginAuthenticationFailException;
+import com.seeyu.core.exception.LoginAuthenticationFailRuntimeException;
 import com.seeyu.core.utils.BaseJsonData;
 import com.seeyu.i18n.core.I18nMessage;
 import com.seeyu.mvc.common.constant.ResponseCode;
@@ -31,10 +32,10 @@ public class GlobalMvcExceptionAdvice {
 
 
     @ResponseBody
-    @ExceptionHandler(value = LoginAuthenticationFailException.class)
-    public BaseJsonData errorHandler(LoginAuthenticationFailException e) {
-        log.warn("未登录或SESSION过期");
-        log.debug("未登录或SESSION过期", e);
+    @ExceptionHandler(value = {LoginAuthenticationFailException.class, LoginAuthenticationFailRuntimeException.class})
+    public BaseJsonData errorLoginAuthenticationFailExceptionHandler(Exception e) {
+        log.warn("未登录或会话过期");
+        log.debug("未登录或会话过期", e);
         return BaseJsonData.ERROR().setCode(ResponseCode.LOGIN_AUTHENTICATION_FAIL).setMessage(I18nMessageKeyConstant.SERVER_EXCEPTION_ALERT_LOGIN_AUTHENTICATION_EXCEPTION);
     }
 

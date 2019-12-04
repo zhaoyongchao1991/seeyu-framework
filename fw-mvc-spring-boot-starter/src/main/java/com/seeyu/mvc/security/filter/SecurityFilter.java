@@ -118,7 +118,7 @@ public class SecurityFilter implements Filter {
             if(me == null){
                 return false;
             }
-            if(me.isAdmin()){
+            if(me.isSystemAdmin()){
                 return true;
             }
             List<SecurityResourceHolderI> userResource = me.getResources();

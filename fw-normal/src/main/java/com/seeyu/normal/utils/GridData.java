@@ -8,12 +8,12 @@ import java.util.List;
  * @author seeyu
  * @date 2019/4/25
  */
-public class GridData {
+public class GridData<T> {
 
     private Integer pageSize;
     private Integer pageNum;
     private Long total;
-    private List list;
+    private List<T> list;
 
     private GridData() {
     }
@@ -26,30 +26,30 @@ public class GridData {
         }
     }
 
-    public static GridData create(BasePage page, List list) {
-        GridData gd = new GridData(page);
+    public static <E> GridData<E> create(BasePage page, List<E> list) {
+        GridData<E> gd = new GridData<>(page);
         gd.setList(list);
         return gd;
     }
 
-    public static GridData create(com.github.pagehelper.Page pageInfo) {
+    public static <E> GridData<E> create(com.github.pagehelper.Page<E> pageInfo) {
         boolean paging = pageInfo.getPageNum() != 0 && pageInfo.getPageSize() != 0;
-        GridData gd = new GridData(paging ? Page.createDefault().setPageNum(pageInfo.getPageNum()).setPageSize(pageInfo.getPageSize()).setTotal(pageInfo.getTotal()) : Page.createNoPaging());
+        GridData<E> gd = new GridData<>(paging ? Page.createDefault().setPageNum(pageInfo.getPageNum()).setPageSize(pageInfo.getPageSize()).setTotal(pageInfo.getTotal()) : Page.createNoPaging());
         gd.list = pageInfo;
         return gd;
     }
 
-    public static GridData create(com.github.pagehelper.Page pageInfo, List list) {
-        GridData gd = GridData.create(pageInfo);
+    public static <E> GridData<E> create(com.github.pagehelper.Page pageInfo, List<E> list) {
+        GridData<E> gd = GridData.create(pageInfo);
         gd.list = list;
         return gd;
     }
 
-    public List getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 
