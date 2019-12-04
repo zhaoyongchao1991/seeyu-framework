@@ -57,18 +57,23 @@ public class MD5 {
     }
 
 
-    public static String encrypt(String data) throws NoSuchAlgorithmException {
+    public static String encrypt(String data) {
        return encrypt(data.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String encrypt(byte[] data) throws NoSuchAlgorithmException {
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-        md5.update(data);
-        BigInteger bi = new BigInteger(1, md5.digest());
-        String returnStr = bi.toString(16);
-        while (returnStr.length() < 32) {
-            returnStr = "0" + returnStr;
+    public static String encrypt(byte[] data) {
+        try{
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(data);
+            BigInteger bi = new BigInteger(1, md5.digest());
+            String returnStr = bi.toString(16);
+            while (returnStr.length() < 32) {
+                returnStr = "0" + returnStr;
+            }
+            return returnStr;
         }
-        return returnStr;
+        catch (NoSuchAlgorithmException e){
+            throw new RuntimeException(e);
+        }
     }
 }

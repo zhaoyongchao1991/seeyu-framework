@@ -28,8 +28,7 @@ public class AESUtils {
             byte[] encrypted = encrypt(data.getBytes(), aKey, aiv);
             return Base64Utils.encode(encrypted);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -45,14 +44,9 @@ public class AESUtils {
         try {
             byte[] encrypted = Base64Utils.decode(encryptedData);
             byte[] original = decrypt(encrypted, aKey, aiv);
-            if (original != null) {
-                return new String(original, StandardCharsets.UTF_8);
-            } else {
-                return null;
-            }
+            return new String(original, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -80,8 +74,7 @@ public class AESUtils {
             cipher.init(Cipher.ENCRYPT_MODE, keyspec, ivspec);
             return cipher.doFinal(plaintext);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -101,8 +94,7 @@ public class AESUtils {
             cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
             return cipher.doFinal(data);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
