@@ -1,9 +1,6 @@
 package com.seeyu.fw.auth.configure;
 
-import com.seeyu.fw.auth.service.AuthAccountRelRoleService;
-import com.seeyu.fw.auth.service.AuthAccountService;
-import com.seeyu.fw.auth.service.AuthRoleService;
-import com.seeyu.fw.auth.service.AuthSystemAccountService;
+import com.seeyu.fw.auth.service.*;
 import com.seeyu.fw.auth.service.helper.AuthAccountServiceHelper;
 import com.seeyu.fw.auth.service.helper.AuthRoleServiceHelper;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -17,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
         AuthRoleService.class, AuthRoleServiceHelper.class,
         AuthAccountService.class, AuthAccountServiceHelper.class,
         AuthAccountRelRoleService.class,
+        AuthSystemAccountService.class,
+        AuthenticationService.class,
+        AuthJwtService.class,
         AuthSystemAccountService.class
 })
 @Configuration

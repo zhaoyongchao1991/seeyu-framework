@@ -132,7 +132,7 @@ public class AuthRoleService {
 
         //roleServiceHelper.validateRole(role);
         //roleServiceHelper.fillRole(role);
-        this.roleMapper.updateByPrimaryKey(role);
+        this.roleMapper.updateByPrimaryKeySelective(role);
     }
 
 

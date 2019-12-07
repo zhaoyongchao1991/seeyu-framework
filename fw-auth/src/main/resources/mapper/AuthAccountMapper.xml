@@ -9,6 +9,12 @@
         where account_account=#{account,jdbcType=VARCHAR}
   </select>
 
+    <select id="selectSystemAccountByAccount" resultMap="BaseResultMap">
+        select *
+        from auth_system_account
+        where account_account=#{account,jdbcType=VARCHAR}
+  </select>
+
   <update id="updateAccountPassword">
         update auth_account
         set account_password=#{accountPassword,jdbcType=VARCHAR},

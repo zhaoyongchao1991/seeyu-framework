@@ -1,6 +1,6 @@
 //package com.seeyu.fw.auth.service.helper;
 //
-//import com.jieyundata.micro.auth.common.vo.LoginUserInfo;
+//import com.jieyundata.micro.auth.common.vo.AuthLoginUserInfo;
 //import com.jieyundata.micro.auth.common.vo.PrincipalData;
 //import com.jieyundata.micro.auth.common.vo.auth.ServiceInfo;
 //import com.jieyundata.micro.auth.server.biz.entity.Resource;
@@ -60,7 +60,7 @@
 //    }
 //
 //
-//    public LoginUserInfo parseLoginUserInfo(PrincipalData<Map<String, Object>> principalData){
+//    public AuthLoginUserInfo parseLoginUserInfo(PrincipalData<Map<String, Object>> principalData){
 //        if(principalData == null || principalData.isExpired()){
 //            return null;
 //        }
@@ -73,7 +73,7 @@
 //    }
 //
 //
-//    public BaseJsonData permission(LoginUserInfo loginUserInfo, String uri) {
+//    public BaseJsonData permission(AuthLoginUserInfo loginUserInfo, String uri) {
 //        SecurityResource requestResource = this.getMatchResource(uri);
 //        SecurityResourceCheckHelper securityResourceCheckHelper = new SecurityResourceCheckHelper(requestResource);
 //
@@ -134,7 +134,7 @@
 //     * @param requestResource
 //     * @return
 //     */
-//    private boolean checkUserResource(LoginUserInfo loginUserInfo, SecurityResource requestResource) {
+//    private boolean checkUserResource(AuthLoginUserInfo loginUserInfo, SecurityResource requestResource) {
 //        if(requestResource == null){
 //            return false;
 //        }
@@ -152,12 +152,12 @@
 //    }
 //
 //
-//    private boolean isLogin(LoginUserInfo loginUserInfo){
+//    private boolean isLogin(AuthLoginUserInfo loginUserInfo){
 //        return loginUserInfo != null;
 //    }
 //
 //
-//    private boolean isAdmin(LoginUserInfo loginUserInfo){
+//    private boolean isAdmin(AuthLoginUserInfo loginUserInfo){
 //        return loginUserInfo != null && loginUserInfo.isAdmin();
 //    }
 //
@@ -192,8 +192,8 @@
 //    }
 //
 //
-//    private LoginUserInfo principalCast2LoginUserInfo(Map<String, Object> principal){
-//        LoginUserInfo loginUserInfo = new LoginUserInfo();
+//    private AuthLoginUserInfo principalCast2LoginUserInfo(Map<String, Object> principal){
+//        AuthLoginUserInfo loginUserInfo = new AuthLoginUserInfo();
 //        if(principal.get("actAddTime") != null){
 //            loginUserInfo.setActAddTime(new Date((Long) principal.get("actAddTime")));
 //        }

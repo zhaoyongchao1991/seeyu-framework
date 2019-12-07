@@ -14,6 +14,8 @@ public interface AuthAccountMapper extends BaseAuthAccountMapper {
 
     AuthAccount selectAccountByAccount(String account);
 
+    AuthAccount selectSystemAccountByAccount(String account);
+
     void updateAccountPassword(@Param("accountId") Integer accountId, @Param("accountPassword") String accountPassword, @Param("accountModifyPwLastTime") Date accountModifyPwLastTime);
 
     @ResultType(Integer.class)

@@ -1,14 +1,15 @@
 package com.seeyu.fw.auth.service;
 
 import com.seeyu.core.constant.ActivationState;
-import com.seeyu.fw.auth.config.AuthConfig;
 import com.seeyu.fw.auth.entity.AuthAccount;
 import com.seeyu.fw.auth.exception.AccountAlreadyExistException;
 import com.seeyu.fw.auth.exception.AccountNotExistException;
+import com.seeyu.fw.auth.exception.PasswordNotMatchException;
 import com.seeyu.fw.auth.mapper.AuthAccountMapper;
 import com.seeyu.fw.auth.service.helper.AuthAccountServiceHelper;
+import com.seeyu.fw.auth.utils.PasswordTool;
 import com.seeyu.fw.auth.vo.AuthAccountAddModel;
-import com.seeyu.normal.utils.Md5Utils;
+import com.seeyu.fw.auth.vo.AuthModifyPassWordModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,23 +63,24 @@ public class AuthAccountService {
 
 
     /**
-     * 重置普通用户密码
      * @param accountId 账号id
      * @param newPassword 明文密码
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public void resetAccountPassword(Integer accountId, String newPassword, String actionUser) throws AccountNotExistException {
-        this.accountServiceHelper.updateAccountPassword(accountId, this.encodePassword(newPassword), true);
+    public void resetAccountPassword(Integer accountId, String newPassword, String actionUser) {
+        this.accountServiceHelper.resetAccountPassword(accountId, newPassword);
     }
 
-
-
-//    @Transactional(rollbackFor = Exception.class)
-//    public void modifyPassword(AuthModifyPassWordModel modifyPassWord, String actionUser) throws Exception {
-//        this.accountServiceHelper.modifyPassword(modifyPassWord);
-//    }
-
+    /**
+     * @param model password 旧密码，newPassword新密码明文
+     * @param actionUser
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void modifyAccountPassword(AuthModifyPassWordModel model, String actionUser) throws PasswordNotMatchException {
+        this.accountServiceHelper.modifyAccountPassword(model.getAccountId(), model.getPassword(), model.getNewPassword());
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public void enable(Integer accountId, String actionUser){
@@ -100,12 +102,6 @@ public class AuthAccountService {
         account.setAccountModifyUser(actionUser);
     }
 
-
-//    public UserInfo authentication(AuthAccount account) throws Exception {
-//        return accountServiceHelper.authentication(account);
-//    }
-
-
     @Transactional(rollbackFor = Exception.class)
     public AuthAccount addAccount(AuthAccountAddModel model, String actionUser) throws AccountAlreadyExistException {
         AuthAccount account = new AuthAccount();
@@ -117,7 +113,7 @@ public class AuthAccountService {
         account.setAccountAddTime(new Date());
         account.setAccountModifyTime(account.getAccountAddTime());
         this.accountServiceHelper.validateAccount(account);
-        account.setAccountPassword(this.encodePassword(account.getAccountPassword()));
+        account.setAccountPassword(PasswordTool.passwordPlaintextEncrypt(account.getAccountPassword()));
         this.accountMapper.insert(account);
         return account;
     }
@@ -149,8 +145,5 @@ public class AuthAccountService {
 
 
 
-    private String encodePassword(String password){
-        return Md5Utils.encrypt(Md5Utils.encrypt(password), AuthConfig.PASSWORD_SALT);
-    }
 
 }

@@ -1,16 +1,13 @@
 package com.seeyu.fw.auth.service.helper;
 
-import com.seeyu.core.utils.Alert;
-import com.seeyu.core.utils.Assert;
 import com.seeyu.fw.auth.constant.message.AccountMessageConstant;
-import com.seeyu.fw.auth.constant.message.SystemMessageConstant;
 import com.seeyu.fw.auth.constant.option.GlobalOptions;
 import com.seeyu.fw.auth.entity.AuthAccount;
-import com.seeyu.fw.auth.entity.AuthSystemAccount;
 import com.seeyu.fw.auth.exception.AccountAlreadyExistException;
-import com.seeyu.fw.auth.exception.AccountNotExistException;
+import com.seeyu.fw.auth.exception.PasswordNotMatchException;
 import com.seeyu.fw.auth.mapper.AuthAccountMapper;
 import com.seeyu.fw.auth.service.AuthSystemAccountService;
+import com.seeyu.fw.auth.utils.PasswordTool;
 import com.seeyu.fw.auth.vo.AuthAccountAddModel;
 import com.seeyu.normal.utils.FormValidator;
 import com.seeyu.normal.utils.FormValidator.ValidateType;
@@ -49,37 +46,39 @@ public class AuthAccountServiceHelper {
     private AuthSystemAccountService systemAccountService;
 
 
-    @Transactional(rollbackFor = Exception.class)
-    public void updateAccountPassword(Integer accountId, String password, boolean reset) throws AccountNotExistException {
-        AuthAccount normalAccount = this.accountMapper.selectByPrimaryKey(accountId);
-        if(normalAccount != null){
-            if(reset){
-                this.resetAccountPassword(normalAccount.getAccountId(), password);
-            }
-            else{
-                this.modifyAccountPassword(normalAccount.getAccountId(), password);
-            }
-        }
-        else{
-//            AuthSystemAccount systemAccount = this.systemAccountService.getSystemAccountById(accountId);
-//            if(systemAccount != null){
-//
+//    @Transactional(rollbackFor = Exception.class)
+//    public void updateAccountPassword(Integer accountId, String password, boolean reset) {
+//        AuthAccount account = this.accountMapper.selectByPrimaryKey(accountId);
+//        if(account != null){
+//            if(reset){
+//                this.resetAccountPassword(account.getAccountId(), password);
 //            }
 //            else{
-                throw new AccountNotExistException();
+//                this.modifyAccountPassword(account.getAccountId(), password);
 //            }
+//        }
+//    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void modifyAccountPassword(Integer accountId, String oldPassword, String newPassword) throws PasswordNotMatchException {
+        //FormValidator.password("密码", newPassword);
+        AuthAccount account = this.accountMapper.selectByPrimaryKey(accountId);
+        if(account != null){
+            //检查旧密码是否匹配
+            if(!PasswordTool.passwordEquals(account.getAccountPassword(), oldPassword)){
+                throw new PasswordNotMatchException();
+            }
+            this.accountMapper.updateAccountPassword(accountId, PasswordTool.passwordPlaintextEncrypt(newPassword), new Date());
         }
     }
 
-    private void modifyAccountPassword(Integer accountId, String password){
-        this.accountMapper.updateAccountPassword(accountId, password, new Date());
+    @Transactional(rollbackFor = Exception.class)
+    public void resetAccountPassword(Integer accountId, String newPassword){
+        String pw = PasswordTool.passwordPlaintextEncrypt(newPassword);
+        this.accountMapper.updateAccountPassword(accountId, pw, null);
     }
 
-    private void resetAccountPassword(Integer accountId, String password){
-        this.accountMapper.updateAccountPassword(accountId, password, null);
-    }
-
-//    public UserInfo authentication(AuthAccount account) throws Exception {
+//    public AuthLoginUserInfo authentication(AuthAccount account) throws Exception {
 //        FormValidator.required(AccountMessageConstant.TITLE_ACCOUNT_ACCOUNT, account.getActAccount());
 //        FormValidator.required(AccountMessageConstant.TITLE_ACCOUNT_PASSWORD, account.getActPassword());
 //
@@ -92,7 +91,7 @@ public class AuthAccountServiceHelper {
 //        //检查密码匹配
 //        Assert.notNull(theAccount, AccountMessageConstant.ACCOUNT_OR_PASSWORD_NOT_MATCH);
 //        Alert.alert(BaseController.passwordValidate(theAccount.getActPassword(), account.getActPassword()), AccountMessageConstant.ACCOUNT_OR_PASSWORD_NOT_MATCH);
-//        UserInfo userInfo = wrapLoginUserResourceData(theAccount, isAdmin);
+//        AuthLoginUserInfo userInfo = wrapLoginUserResourceData(theAccount, isAdmin);
 //        userInfo.setToken(createToken(userInfo,  account.getInfo()));
 //        return userInfo;
 //    }
@@ -103,7 +102,7 @@ public class AuthAccountServiceHelper {
 //        FormValidator.required(AccountMessageConstant.TITLE_ACCOUNT_CONFIRM_PASSWORD, modifyPassWord.getConfirmPassword());
 //        Assert.equals(modifyPassWord.getNewPassword(), modifyPassWord.getConfirmPassword(), AccountMessageConstant.CONFIRM_PASSWORD_NOT_EQUAL);
 //
-//        LoginUserInfo loginUserInfo = LoginUserInfoContext.getLoginUser();
+//        AuthLoginUserInfo loginUserInfo = LoginUserInfoContext.getLoginUser();
 //
 //        if(loginUserInfo.isAdmin()){
 //            this.modifyAdminAccountPassword(loginUserInfo.getActId(), modifyPassWord);
@@ -166,13 +165,13 @@ public class AuthAccountServiceHelper {
 //    }
 
 
-//    private String createToken(UserInfo user, Map<String, Object> info) throws Exception {
+//    private String createToken(AuthLoginUserInfo user, Map<String, Object> info) throws Exception {
 //        return jwtService.createToken(BeanUtils.transBean2Map(warpLoginUserInfo(user, info), new HashMap<>(10)));
 //    }
 
 
-//    private LoginUserInfo warpLoginUserInfo(UserInfo user, Map<String, Object> info){
-//        LoginUserInfo loginUserInfo = new LoginUserInfo();
+//    private AuthLoginUserInfo warpLoginUserInfo(AuthLoginUserInfo user, Map<String, Object> info){
+//        AuthLoginUserInfo loginUserInfo = new AuthLoginUserInfo();
 //        loginUserInfo.setActAccount(user.getActAccount());
 //        loginUserInfo.setActActive(user.getActActive());
 //        loginUserInfo.setActAddTime(user.getActAddTime());
@@ -212,8 +211,8 @@ public class AuthAccountServiceHelper {
 //    }
 
 
-//    private UserInfo wrapLoginUserResourceData(Account account, boolean isAdmin){
-//        UserInfo userInfo = UserInfo.wrap(account);
+//    private AuthLoginUserInfo wrapLoginUserResourceData(Account account, boolean isAdmin){
+//        AuthLoginUserInfo userInfo = AuthLoginUserInfo.wrap(account);
 //        if(isAdmin){
 //            userInfo.setAdmin(true);
 //            userInfo.setMenus(getAdminPlainMenus());
@@ -263,7 +262,7 @@ public class AuthAccountServiceHelper {
 //        return serviceInfo == null ? -1 : serviceInfo.getSeeId();
 //    }
 
-//    private List<Integer> getRoleIds(UserInfo user){
+//    private List<Integer> getRoleIds(AuthLoginUserInfo user){
 //        if(user.getRoles() == null){
 //            return null;
 //        }

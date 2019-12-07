@@ -1,20 +1,16 @@
 package com.seeyu.fw.auth.configure;
 
+import com.seeyu.fw.auth.config.TokenConfig;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @author seeyu
- * @date 2019/11/28
+ * @date 2019/12/5
  */
 @ImportAutoConfiguration({
-        ConfigAutoConfigure.class,
-        ServiceAutoConfigure.class
+        TokenConfig.class
 })
 @Configuration
-public class AutoConfigure {
-
-
-
-
+public class ConfigAutoConfigure {
 }

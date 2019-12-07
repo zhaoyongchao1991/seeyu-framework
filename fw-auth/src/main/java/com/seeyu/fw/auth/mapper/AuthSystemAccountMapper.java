@@ -1,11 +1,9 @@
 package com.seeyu.fw.auth.mapper;
 
-import com.seeyu.fw.auth.entity.AuthAccount;
 import com.seeyu.fw.auth.entity.AuthSystemAccount;
 import com.seeyu.fw.auth.mapper.base.BaseAuthSystemAccountMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.Date;
 
