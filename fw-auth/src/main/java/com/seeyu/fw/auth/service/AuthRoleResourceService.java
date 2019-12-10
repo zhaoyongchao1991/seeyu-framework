@@ -1,9 +1,7 @@
 //package com.seeyu.fw.auth.service;
 //
-//import com.jieyundata.micro.auth.server.biz.entity.RoleResource;
-//import com.jieyundata.micro.auth.server.biz.mapper.RoleResourceMapper;
-//import com.jieyundata.micro.auth.server.constant.message.ResourceMessageConstant;
-//import com.jieyundata.micro.auth.server.constant.message.RoleMessageConstant;
+//import com.seeyu.fw.auth.constant.message.ResourceMessageConstant;
+//import com.seeyu.fw.auth.constant.message.RoleMessageConstant;
 //import com.seeyu.normal.utils.FormValidator;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;

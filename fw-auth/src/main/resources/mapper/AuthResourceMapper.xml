@@ -2,4 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seeyu.fw.auth.mapper.AuthResourceMapper">
   <resultMap extends="com.seeyu.fw.auth.mapper.base.BaseAuthResourceMapper.BaseResultMap" id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthResource" />
+
+
+  <select id="selectActiveResourcesByServiceId" resultMap="BaseResultMap">
+    select *
+    from auth_resource t
+    where t.resource_active=1
+    and t.resource_service_id=#{serviceId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAccountGrantServiceActiveResources" resultMap="BaseResultMap">
+    select DISTINCT t2.*
+    from auth_account_r_role t,auth_role_r_resource t1, auth_resource t2
+    where t.role_id=t1.role_id and t1.resource_id=t2.resource_id
+    and t2.resource_active=1
+    and t2.resource_service_id=#{serviceId,jdbcType=INTEGER}
+    and t.account_id=#{accountId,jdbcType=INTEGER}
+  </select>
+
 </mapper>

@@ -12,5 +12,9 @@ public class GlobalConstant {
      */
     public static final String ACCOUNT_DEFAULT_PASSWORD = "123456";
 
+    /**
+     * 默认的服务id
+     */
+    public static final int  DEFAULT_SERVICE_ID = 1;
 
 }

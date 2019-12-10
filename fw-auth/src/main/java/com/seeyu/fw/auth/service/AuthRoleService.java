@@ -1,7 +1,9 @@
 package com.seeyu.fw.auth.service;
 
 import com.seeyu.core.constant.ActivationState;
+import com.seeyu.core.utils.Alert;
 import com.seeyu.fw.auth.constant.message.RoleMessageConstant;
+import com.seeyu.fw.auth.constant.message.SystemMessageConstant;
 import com.seeyu.fw.auth.entity.AuthRole;
 import com.seeyu.fw.auth.mapper.AuthRoleMapper;
 import com.seeyu.fw.auth.service.helper.AuthRoleServiceHelper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author seeyu
@@ -21,6 +24,8 @@ import java.util.Date;
 @Service
 public class AuthRoleService {
 
+    @Autowired
+    private AuthRoleRelResourceService roleRelResourceService;
     @Autowired
     private AuthRoleServiceHelper roleServiceHelper;
     @Autowired
@@ -55,6 +60,10 @@ public class AuthRoleService {
 //    }
 
 
+    public List<AuthRole> getAccountGrantActiveRoles(Integer actId){
+        return this.roleMapper.selectAccountGrantActiveRoleList(actId);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void delete(Integer roeId){
         FormValidator.required(RoleMessageConstant.TITLE_ROLE_ID, roeId);
@@ -63,42 +72,16 @@ public class AuthRoleService {
         //roleResourceMapper.deleteRoleRelation(roeId);
     }
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public void refreshRoleResources(Integer roeId, Integer[] resourceIds){
-//        Alert.alert(roleMapper.selectByPrimaryKey(roeId) != null, SystemMessageConstant.OBJECT_NOT_EXIST, RoleMessageConstant.TITLE_ROLE);
-//        roleResourceMapper.deleteByRoleId(roeId);
-//        if(resourceIds != null){
-//            for (Integer resId : resourceIds){
-//                RoleResource roleResource = new RoleResource();
-//                roleResource.setRorRoeid(roeId);
-//                roleResource.setRorReeid(resId);
-//                roleResourceService.addRoleResource(roleResource);
-//            }
-//        }
-//        //修改角色后刷新资源， 效率非常低 需重构
-//        this.authorityServiceHelper.reloadResources();
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public void refreshRoleRelResourceRelations(Integer roleId, List<Integer> resourceIds, String actionUser){
+       this.roleRelResourceService.refreshRelations(roleId, resourceIds, actionUser);
+    }
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public void editRoleResources(Integer roeId, Integer[] addResourceIds, Integer[] removeResourceIds){
-//        Alert.alert(roleMapper.selectByPrimaryKey(roeId) != null, SystemMessageConstant.OBJECT_NOT_EXIST, RoleMessageConstant.TITLE_ROLE);
-//        if(addResourceIds != null){
-//            for (Integer resId : addResourceIds){
-//                RoleResource roleResource = new RoleResource();
-//                roleResource.setRorRoeid(roeId);
-//                roleResource.setRorReeid(resId);
-//                roleResourceService.addRoleResource(roleResource);
-//            }
-//        }
-//        if(removeResourceIds != null){
-//            for (Integer resId : removeResourceIds){
-//                RoleResource roleResource = new RoleResource();
-//                roleResource.setRorRoeid(roeId);
-//                roleResource.setRorReeid(resId);
-//                roleResourceService.deleteRoleResource(roleResource);
-//            }
-//        }
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public void editRoleRelResourceRelations(Integer roleId, List<Integer> addResourceIds, List<Integer> removeResourceIds, String actionUser){
+        this.roleRelResourceService.addRelation(roleId, addResourceIds, actionUser);
+        this.roleRelResourceService.deleteRelations(roleId, removeResourceIds);
+    }
 
 //    @Transactional(rollbackFor = Exception.class)
 //    public void enable(Integer roeId){

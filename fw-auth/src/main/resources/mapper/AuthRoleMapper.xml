@@ -4,6 +4,13 @@
   <resultMap extends="com.seeyu.fw.auth.mapper.base.BaseAuthRoleMapper.BaseResultMap" id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthRole" />
 
 
+  <select id="selectAccountGrantActiveRoleList" resultMap="BaseResultMap">
+      select t.*
+      from auth_role t, auth_account_r_role t1
+      where t.role_id=t1.role_id
+      and t1.account_id=#{accountId,jdbcType=INTEGER}
+  </select>
+
   <select id="getRoleNameCount" resultType="int">
     select count(1) from auth_role where role_name=#{roleName,jdbcType=VARCHAR}
     <if test="roleId != null">

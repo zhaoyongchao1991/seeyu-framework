@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seeyu.fw.auth.mapper.AuthMenuMapper">
   <resultMap extends="com.seeyu.fw.auth.mapper.base.BaseAuthMenuMapper.BaseResultMap" id="BaseResultMap" type="com.seeyu.fw.auth.entity.AuthMenu" />
+
+  <resultMap id="MenuResourceResultMap" type="com.seeyu.fw.auth.vo.authority.MenuResource" extends="BaseResultMap">
+    <association property="resource" resultMap="com.seeyu.fw.auth.mapper.base.BaseAuthResourceMapper.BaseResultMap"/>
+  </resultMap>
+
+
+  <select id="selectActiveMenuResourceListByServiceId" resultMap="MenuResourceResultMap">
+    select t.*,t1.*
+    from auth_menu t
+    left join auth_resource t1 on t.menu_resource_id=t1.resource_id
+    where menu_active=1
+    and menu_service_id=#{serviceId,jdbcType=INTEGER}
+  </select>
+
 </mapper>

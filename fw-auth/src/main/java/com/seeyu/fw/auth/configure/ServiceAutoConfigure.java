@@ -17,7 +17,10 @@ import org.springframework.context.annotation.Configuration;
         AuthSystemAccountService.class,
         AuthenticationService.class,
         AuthJwtService.class,
-        AuthSystemAccountService.class
+        AuthSystemAccountService.class,
+        AuthMenuService.class,
+        AuthResourceService.class,
+        AuthRoleRelResourceService.class
 })
 @Configuration
 public class ServiceAutoConfigure {

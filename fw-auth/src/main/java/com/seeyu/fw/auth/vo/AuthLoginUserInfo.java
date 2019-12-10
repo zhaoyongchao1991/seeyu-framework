@@ -3,6 +3,7 @@ package com.seeyu.fw.auth.vo;
 import com.seeyu.fw.auth.entity.AuthAccount;
 import com.seeyu.fw.auth.entity.AuthResource;
 import com.seeyu.fw.auth.entity.AuthRole;
+import com.seeyu.fw.auth.vo.abst.AuthRoleAbstractInfo;
 import com.seeyu.fw.auth.vo.authority.MenuPlain;
 import lombok.Data;
 import lombok.ToString;
@@ -44,7 +45,7 @@ public class AuthLoginUserInfo {
     private boolean passwordExpired;
 
     private String token;
-    private List<AuthRole> roles;
+    private List<AuthRoleAbstractInfo> roles;
     private List<AuthResource> resources;
     private List<MenuPlain> menus;
 
