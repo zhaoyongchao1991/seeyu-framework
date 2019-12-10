@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class Page extends BasePage {
 
+    public static int MAX_PAGE_SIZE = 1000;
     public static final String SEPARATOR = ",";
     @JsonIgnore
     protected List<OrderEntry> orderByEntryList = new ArrayList<>();
@@ -30,7 +31,7 @@ public class Page extends BasePage {
     }
 
     public static Page createNoPaging(){
-        return new Page().setPaging(false);
+        return new Page().setPaging(false).setPageNum(1).setPageSize(MAX_PAGE_SIZE);
     }
 
 
@@ -52,21 +53,21 @@ public class Page extends BasePage {
     }
 
 
-    public void startOrderBy(){
-        String orderByString = genOrderByString();
-        if(StringUtils.isNotBlank(orderByString)){
-            PageHelper.orderBy(orderByString);
-        }
-    }
-
 
     /**
      * 使用pageHelper框架进行分页
      */
     public void startPage(){
-        startOrderBy();
-        if(isPaging()){
+        //if(isPaging()){
             PageHelper.startPage(pageNum, pageSize);
+        //}
+        startOrderBy();
+    }
+
+    private void startOrderBy(){
+        String orderByString = genOrderByString();
+        if(StringUtils.isNotBlank(orderByString)){
+            PageHelper.orderBy(orderByString);
         }
     }
 
@@ -142,7 +143,7 @@ public class Page extends BasePage {
 
     @Override
     public Page setPageSize(Integer pageSize) {
-        super.setPageSize(pageSize);
+        super.setPageSize(Math.min(pageSize, MAX_PAGE_SIZE));
         return this;
     }
 
