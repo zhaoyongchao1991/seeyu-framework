@@ -23,7 +23,9 @@ public class AuthRoleRelResourceService {
     void addRelation(Integer roleId, List<Integer> resourceIds, String actionUser){
         if(resourceIds != null){
             for(Integer resourceId : resourceIds){
-                this.addRelation(roleId, resourceId, actionUser);
+                if(resourceId != null){
+                    this.addRelation(roleId, resourceId, actionUser);
+                }
             }
         }
     }
@@ -44,7 +46,9 @@ public class AuthRoleRelResourceService {
     void deleteRelations(Integer roleId, List<Integer> resourceIds){
         if(resourceIds != null){
             for(Integer resourceId : resourceIds){
-                this.deleteRelation(roleId, resourceId);
+                if(resourceId != null){
+                    this.deleteRelation(roleId, resourceId);
+                }
             }
         }
     }

@@ -20,6 +20,10 @@ public class AuthAccountRelRoleService {
     private AuthAccountRelRoleMapper accountRelRoleMapper;
 
 
+    public boolean existRelation(Integer roleId){
+        return this.accountRelRoleMapper.getCountByRoleId(roleId) != 0;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     void addRelation(Integer accountId, List<Integer> roleIds, String actionUser){
         if(roleIds != null){
@@ -53,6 +57,11 @@ public class AuthAccountRelRoleService {
     @Transactional(rollbackFor = Exception.class)
     void deleteRelationByAccount(Integer accountId){
         this.accountRelRoleMapper.deleteRelationByAccount(accountId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    void deleteRelationByRole(Integer roleId){
+        this.accountRelRoleMapper.deleteRelationByRole(roleId);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -2,9 +2,11 @@ package com.seeyu.fw.auth.service;
 
 import com.seeyu.core.constant.ActivationState;
 import com.seeyu.core.utils.Alert;
+import com.seeyu.core.utils.Assert;
 import com.seeyu.fw.auth.constant.message.RoleMessageConstant;
 import com.seeyu.fw.auth.constant.message.SystemMessageConstant;
 import com.seeyu.fw.auth.entity.AuthRole;
+import com.seeyu.fw.auth.exception.EntityAlreadyInUsedException;
 import com.seeyu.fw.auth.mapper.AuthRoleMapper;
 import com.seeyu.fw.auth.service.helper.AuthRoleServiceHelper;
 import com.seeyu.fw.auth.vo.AuthRoleAddModel;
@@ -24,6 +26,8 @@ import java.util.List;
 @Service
 public class AuthRoleService {
 
+    @Autowired
+    private AuthAccountRelRoleService accountRelRoleService;
     @Autowired
     private AuthRoleRelResourceService roleRelResourceService;
     @Autowired
@@ -65,11 +69,17 @@ public class AuthRoleService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Integer roeId){
-        FormValidator.required(RoleMessageConstant.TITLE_ROLE_ID, roeId);
-        roleMapper.deleteByPrimaryKey(roeId);
-        //userRoleMapper.deleteRoleRelation(roeId);
-        //roleResourceMapper.deleteRoleRelation(roeId);
+    public void deleteRole(Integer roleId) throws EntityAlreadyInUsedException {
+       this.deleteRole(roleId, false);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRoleForce(Integer roleId){
+        try {
+            this.deleteRole(roleId, true);
+        } catch (EntityAlreadyInUsedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -151,5 +161,21 @@ public class AuthRoleService {
 //        return roleId;
 //    }
 
+    private void deleteRole(Integer roleId, boolean force) throws EntityAlreadyInUsedException {
+        Assert.notNull(roleId, "roleId不能为空");
+        if(!force){
+            this.checkRelations(roleId);
+        }
+        //删除角色资源对应关系
+        this.roleRelResourceService.deleteRelationByRole(roleId);
+        this.accountRelRoleService.deleteRelationByRole(roleId);
+        this.roleMapper.deleteByPrimaryKey(roleId);
+    }
+
+    private void checkRelations(Integer roleId) throws EntityAlreadyInUsedException {
+        if(this.accountRelRoleService.existRelation(roleId)){
+            throw new EntityAlreadyInUsedException("角色已经分配给用户");
+        }
+    }
 
 }
